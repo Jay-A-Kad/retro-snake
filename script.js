@@ -11,6 +11,9 @@ let gameSpeedDelay = 200;
 let gameStarted = false;
 const instructionText = document.getElementById('instruction-text');
 const logo = document.getElementById('logo');
+let score = document.getElementById('score');
+score = 0;
+const highscore = document.getElementById('highScore');
 
 
 // draw game map, snake and food
@@ -52,7 +55,7 @@ function drawFood() {
     board.appendChild(foodElement);
 }
 
-draw();
+// draw();
 
 // generate food
 
@@ -84,7 +87,9 @@ function move() {
 
     if (head.x === food.x && head.y === food.y) {
         food = generateFood();
-        clearInterval();
+        score += 1;
+        console.log(score)
+        clearInterval(gameInterval);
         gameInterval = setInterval(() => {
             move();
             draw();
@@ -102,12 +107,55 @@ function startGame() {
     logo.style.display = 'none';
     gameInterval = setInterval(() => {
         move();
-        checkCollision();
+        // checkCollision();
         draw();
     }, gameSpeedDelay);
 }
 
+// key event listener
+function handleKeyPress(event) {
+    if ((!gameStarted && event.code === 'space') ||
+        (!gameStarted && event.key === ' ')) {
+        startGame();
+    } else {
+        switch (event.key) {
+            case 'ArrowUp':
+                direction = 'up';
+                break;
+            case 'ArrowDown':
+                direction = 'down';
+                break;
+            case 'ArrowLeft':
+                direction = 'left';
+                break;
+            case 'ArrowRight':
+                direction = 'right';
+                break;
 
+        }
+    }
+}
+
+
+
+document.addEventListener('keydown', handleKeyPress);
+
+
+// function checkCollision() {
+//     const head = snake[0];
+//     if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
+//         resetGame();
+//     }
+
+//     for (let i = 0; i < snake.length; i++) {
+//         if (head.x === snake[1].x)
+//     }
+// }
+
+// function increaseSpeed() {
+//     if (gameSpeedDelay > 150) {
+//         gameSpeedDelay -= 20;
+//     }
 
 
 // setInterval(() => {
